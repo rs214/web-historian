@@ -10,10 +10,21 @@ exports.headers = {
   'Content-Type': 'text/html'
 };
 
-exports.serveAssets = function(res, asset, callback) {
+exports.serveAssets = function(requestType, asset, callback) {
   // Write some code here that helps serve up your static files!
   // (Static files are things like html (yours or archived from others...),
   // css, or anything that doesn't change often.)
+
+  archive.isUrlArchived(asset, (err, data) => {
+    if (err) {
+      if (requestType === 'POST') { archive.addUrlToList(asset); }
+      fs.readFile(`${archive.paths.siteAssets}/loading.html`, 'utf8', (err, data) => {
+        callback('ERROR', data);
+      });
+    } else {
+      callback(null, data);
+    }
+  });
 };
 
 
