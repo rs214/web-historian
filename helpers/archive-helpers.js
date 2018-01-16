@@ -44,17 +44,14 @@ exports.isUrlInList = function(url, callback) {
   exports.readListOfUrls((sites) => {
     var found = _.any(sites, function (site, i) {
       return site.match(url);
-    })
+    });
     callback(found);
   });
 };
 
-exports.addUrlToList = function(url) {
-  exports.isUrlInList(url, (url, urlArray) => {
-    urlArray.push(url);
-    fs.writeFile(exports.paths.list, urlArray.join('\n'), (err) => {
-      if (err) { console.log(err); }
-    });
+exports.addUrlToList = function(url, callback) {
+  fs.appendFile(exports.paths.list, url + '\n', function(err, file) {
+    callback();
   });
 };
 
