@@ -41,11 +41,11 @@ exports.readListOfUrls = function(callback) {
 
 // executes callback if url isnt in list
 exports.isUrlInList = function(url, callback) {
-  exports.readListOfUrls((urlArray) => {
-    for (var otherUrl of urlArray) {
-      if (otherUrl === url) { return; }
-    }
-    callback(url, urlArray);
+  exports.readListOfUrls((sites) => {
+    var found = _.any(sites, function (site, i) {
+      return site.match(url);
+    })
+    callback(found);
   });
 };
 
