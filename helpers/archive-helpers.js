@@ -56,9 +56,10 @@ exports.addUrlToList = function(url, callback) {
 };
 
 exports.isUrlArchived = function(url, callback) {
-  fs.readFile(`${exports.paths.archivedSites}/${url}`, 'utf8', (err, data) => {
-    console.log('isUrlArchived:', url);
-    callback(err, data);
+  var sitePath = path.join(exports.paths.archivedSites, url);
+
+  fs.exists(sitePath, function(exists) {
+    callback(exists);
   });
 };
 
