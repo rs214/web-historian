@@ -63,20 +63,11 @@ exports.isUrlArchived = function(url, callback) {
   });
 };
 
-exports.downloadUrls = function(urlArray) { // urls is array ['www.google.com', 'www.facebook.com']
 
-  for (var url of urlArray) {
-    request('http://' + url, function (error, response, body) {
-      if (!error) {
-        console.log('downloadUrls:', url);
-        fs.writeFile(`${exports.paths.archivedSites}/${url}`, body, (err) => {
-          // if (err) { console.log(err); }
-        });
-      }
-    });
-  }
-  fs.writeFile(exports.paths.list, '', (err) => {
-    if (err) { console.log(err); }
+exports.downloadUrls = function(urls) {
+  _.each(urls, function (url) {
+    if (!url) { return; }
+    request('http://' + url).pipe(fs.createWriteStream(exports.paths.archivedSites + '/' + url));
   });
 };
 
